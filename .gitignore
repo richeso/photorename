@@ -1,3 +1,5 @@
 #Build
 bin/
+build/
+.gradle/
 Thumbs.db
