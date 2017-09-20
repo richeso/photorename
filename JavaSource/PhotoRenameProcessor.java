@@ -106,6 +106,8 @@ public int ProcessDirectory()
 private int renameFile(int offsetHours, int offsetMinutes,File jpegFile, String matchMake)
 	 throws Exception {
 	String fileName     = jpegFile.getName();
+	String basefilename = fileName.substring(0,fileName.lastIndexOf("."));
+	
 	Metadata metadata = JpegMetadataReader.readMetadata(jpegFile);
 	Directory exifDirectory = metadata.getDirectory(ExifDirectory.class);
 	String cameraMake = exifDirectory.getString(ExifDirectory.TAG_MAKE);
@@ -169,7 +171,7 @@ private int renameFile(int offsetHours, int offsetMinutes,File jpegFile, String 
 		// change output directory if requested
 		parentPath = PhotoRenamer.getOutputDirectory(parentPath, newFolderName);
 	}
-	String newFileName = parentPath+"\\"+newDate+appendText+"-"+make+"-"+model+".JPG";
+	String newFileName = parentPath+"\\"+newDate+appendText+"-"+make+"-"+model+"_"+basefilename+".JPG";
 	PhotoStampProcessor.createDir(newFileName);
 	File newFile = new File(newFileName);
 	jpegFile.renameTo(newFile);
@@ -186,11 +188,11 @@ private int renameFile(int offsetHours, int offsetMinutes,File jpegFile, String 
 private int renameNormalFile(int offsetHours, int offsetMinutes,File normalFile)
 	 throws Exception {
 	String fileName     = normalFile.getName();
-	
-	
+
 	String parentPath   = normalFile.getParent();
 	String lastDir = parentPath.substring(parentPath.lastIndexOf("\\")+1);
 	String filextension = fileName.substring(fileName.lastIndexOf(".") + 1);
+	String basefilename = fileName.substring(0,fileName.lastIndexOf("."));
 	
 	Date lastmodified =  new Date(normalFile.lastModified());
 	GregorianCalendar cal = new GregorianCalendar();
@@ -206,7 +208,7 @@ private int renameNormalFile(int offsetHours, int offsetMinutes,File normalFile)
 		// change output directory if requested
 		parentPath = PhotoRenamer.getOutputDirectory(parentPath, newFolderName);
 	}
-	String newFileName = parentPath+"\\"+newDate+appendText+"_"+lastDir+"."+filextension;
+	String newFileName = parentPath+"\\"+newDate+appendText+"_"+lastDir+"_"+basefilename+"."+filextension;
 	PhotoStampProcessor.createDir(newFileName);
 	File newFile = new File(newFileName);
 	normalFile.renameTo(newFile);
