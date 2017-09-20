@@ -75,6 +75,14 @@ public int ProcessDirectory()
 		}
 		else if ( strFilesDirs[i].isFile ( ) ) {
 			String fileName = strFilesDirs[i].getName();
+			if (!fileName.toLowerCase().endsWith(".mp4") &&
+			    !fileName.toLowerCase().endsWith(".m4v") &&
+			    !fileName.toLowerCase().endsWith(".mpg") &&
+			    !fileName.toLowerCase().endsWith(".mts") &&
+			    !fileName.toLowerCase().endsWith(".jpg") &&
+			    !fileName.toLowerCase().endsWith(".png") 
+			    );
+			else
 			if (fileName.toUpperCase().endsWith(".JPG")) {
 				//System.out.println ( "File: " + strFilesDirs[i] + " (" + strFilesDirs[i].length ( ) + ")" ) ;
 				File jpegFile = strFilesDirs[i];
