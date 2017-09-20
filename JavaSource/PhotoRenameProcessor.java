@@ -84,7 +84,16 @@ public int ProcessDirectory()
 					System.out.println("Failed to rename Photo: "+jpegFile.getName()+ " Error: "+e.getMessage());
 				}
 			}
-		}
+			else {
+				// not a jpeg file - rename using file date/time
+				File normalFile = strFilesDirs[i];
+				try {
+					numPhotos += renameNormalFile(offsetHours, offsetMinutes, normalFile);
+				} catch (Exception e) {
+					System.out.println("Failed to rename Normal File: "+normalFile.getName()+ " Error: "+e.getMessage());
+				}
+			}
+		} 
 	}
 	return numPhotos;
 }
@@ -164,6 +173,43 @@ private int renameFile(int offsetHours, int offsetMinutes,File jpegFile, String 
 	PhotoStampProcessor.createDir(newFileName);
 	File newFile = new File(newFileName);
 	jpegFile.renameTo(newFile);
+	
+	System.out.println(fileName + " renamed to ===> "+newFileName);
+	return +1;
+	
+}
+/**
+ * @param offsetHours
+ * @param jpegFile
+ * @throws JpegProcessingException
+ */
+private int renameNormalFile(int offsetHours, int offsetMinutes,File normalFile)
+	 throws Exception {
+	String fileName     = normalFile.getName();
+	
+	
+	String parentPath   = normalFile.getParent();
+	String lastDir = parentPath.substring(parentPath.lastIndexOf("\\")+1);
+	String filextension = fileName.substring(fileName.lastIndexOf(".") + 1);
+	
+	Date lastmodified =  new Date(normalFile.lastModified());
+	GregorianCalendar cal = new GregorianCalendar();
+	cal.setTime(lastmodified);
+	cal.add(Calendar.HOUR, offsetHours);
+	cal.add(Calendar.MINUTE,offsetMinutes);
+	String newDate = dateFormatter.format(cal.getTime());
+	//String newDate = DateFormat.getDateTimeInstance().format(cal.getTime()).replace(',',' ').replace(':','_').replace(' ','_');
+	String appendText = PhotoRenamer.findTag(cal.getTime());
+	if (!appendText.trim().equals("")) {
+		String[] breakdownAppendText = appendText.split("-");
+		String newFolderName = newDate.substring(0,10)+"-"+appendText.split("-")[1];
+		// change output directory if requested
+		parentPath = PhotoRenamer.getOutputDirectory(parentPath, newFolderName);
+	}
+	String newFileName = parentPath+"\\"+newDate+appendText+"_"+lastDir+"."+filextension;
+	PhotoStampProcessor.createDir(newFileName);
+	File newFile = new File(newFileName);
+	normalFile.renameTo(newFile);
 	
 	System.out.println(fileName + " renamed to ===> "+newFileName);
 	return +1;
