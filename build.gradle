@@ -4,7 +4,7 @@ mainClassName = 'PhotoRenamer'
 version = '' 
 compileJava.options.fork = true
 compileJava.options.compilerArgs << '-XDignore.symbol.file'
-compileJava.options.forkOptions.executable = 'c:/Program Files/Java/jdk1.8.0_92/bin/javac.exe'
+compileJava.options.forkOptions.executable = 'c:/Program Files/Java/jdk1.7.0_80/bin/javac.exe'
 repositories {
    flatDir { dirs "lib" }
    mavenCentral()
