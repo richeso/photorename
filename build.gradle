@@ -1,0 +1,35 @@
+apply plugin: 'java'
+apply plugin: 'application'
+mainClassName = 'com.rcs.PhotoRenamer'
+version = '' 
+compileJava.options.fork = true
+compileJava.options.forkOptions.executable = 'c:/Program Files/Java/jdk1.7.0_80/bin/javac.exe'
+repositories {
+   flatDir { dirs "lib" }
+   mavenCentral()
+}
+
+
+dependencies {
+   //uncomment the next line to include db2 jars in the fat jar 
+   //compile fileTree(dir: 'lib', include: '*.jar')
+}
+
+jar {
+	
+	sourceSets {
+	    main {
+	        java {
+	            srcDir 'JavaSource'
+	        }
+	    }
+	}
+	
+	 manifest { 
+		    attributes "Main-Class": "$mainClassName"
+		  }  
+	 
+	 from {
+		    configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+		  }
+}
